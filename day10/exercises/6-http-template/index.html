@@ -1,0 +1,42 @@
+<html>
+    <head>
+        <title>{{ .title }}</title>
+
+    </head>
+    <body>
+
+        <p>hello {{ .name }}</p>
+
+        {{ if gt .age 20 }}
+            <p> hello, old main {{ .name }}</p>
+        {{ else }}
+            <p> hello, yong man {{ .name }}</p>
+        {{ end }}
+
+
+        <p> {{ .name }} 的朋友们：</p>
+       
+        {{ with .friend}}
+        <table border="1">
+            <tr>
+                <td>姓名</td>
+                <td>年龄</td>
+                <td>描述</td>
+            </tr>
+
+            {{ range . }}
+
+            <tr>
+                <td>{{ .Name }}</td>
+                <td>{{ .Age }}</td>
+                <td>{{ .Describe }}</td>
+            </tr>
+            {{ end }}
+        </table>
+        {{ end }}
+
+
+        <p>{{ . }}</p>
+
+    </body>
+</html>

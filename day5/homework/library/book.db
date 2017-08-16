@@ -1,0 +1,13 @@
+{"Name":"book0","Total":10,"Surplus":10,"Author":"testName","PublicationTime":"2010-00-01","Info":{},"BorrowCount":6}
+{"Name":"book1","Total":10,"Surplus":10,"Author":"testName","PublicationTime":"2011-01-01","Info":{"user1":1},"BorrowCount":25}
+{"Name":"book2","Total":10,"Surplus":10,"Author":"testName","PublicationTime":"2012-02-01","Info":{},"BorrowCount":11}
+{"Name":"book3","Total":10,"Surplus":10,"Author":"testName","PublicationTime":"2013-03-01","Info":{},"BorrowCount":19}
+{"Name":"book4","Total":10,"Surplus":10,"Author":"testName","PublicationTime":"2014-04-01","Info":{},"BorrowCount":7}
+{"Name":"book5","Total":10,"Surplus":10,"Author":"testName","PublicationTime":"2015-05-01","Info":{},"BorrowCount":0}
+{"Name":"book6","Total":10,"Surplus":10,"Author":"testName","PublicationTime":"2016-06-01","Info":{},"BorrowCount":3}
+{"Name":"book7","Total":10,"Surplus":10,"Author":"testName","PublicationTime":"2017-07-01","Info":{},"BorrowCount":0}
+{"Name":"book8","Total":10,"Surplus":10,"Author":"testName","PublicationTime":"2018-08-01","Info":{},"BorrowCount":0}
+{"Name":"book9","Total":10,"Surplus":10,"Author":"testName","PublicationTime":"2019-09-01","Info":{},"BorrowCount":0}
+{"Name":"book10","Total":10,"Surplus":10,"Author":"testName","PublicationTime":"2019-09-01","Info":{},"BorrowCount":0}
+{"Name":"book11","Total":10,"Surplus":10,"Author":"testName","PublicationTime":"2019-09-01","Info":{},"BorrowCount":0}
+{"Name":"book12","Total":10,"Surplus":10,"Author":"testName","PublicationTime":"2019-09-01","Info":{},"BorrowCount":0}

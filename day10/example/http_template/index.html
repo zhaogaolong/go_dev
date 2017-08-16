@@ -1,0 +1,16 @@
+<html>
+    <head>
+        <title>{{.Title}}</title>
+    </head>
+<body>
+
+    {{if gt .Age 15}}
+    <p>hello old main {{ .Age}}</p>
+    {{else}}
+    <p>hello yong main {{ .Age}}</p>
+    {{end}}
+<p>{{.Name}}</p>
+<p>{{.}}</p>
+
+</body>
+</html>
