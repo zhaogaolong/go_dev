@@ -156,7 +156,52 @@ func (p *Client) login(msg proto.Message) (err error) {
 		return
 	}
 	clientMgr.AddClient(cmd.Id, p)
+
+	p.NotifyOtherUserOnline(cmd.Id)
+
 	return
+
+}
+
+func (p *Client) NotifyOtherUserOnline(userId int) {
+	// 获取在线用户列表
+	users := clientMgr.GetAllUsers()
+
+	for id, client := range users {
+		if id == userId {
+			continue
+		}
+		fmt.Println("notify user")
+		client.NotifyUserOnline(userId)
+	}
+
+}
+
+func (p *Client) NotifyUserOnline(userId int) {
+	var resMsg proto.Message
+	resMsg.Cmd = proto.UserStatusNotifyRes
+
+	var notifyRes proto.UserStatusNotify
+	notifyRes.UserId = userId
+	notifyRes.Status = proto.UserOnline
+
+	data, err := json.Marshal(notifyRes)
+	if err != nil {
+		fmt.Println("user notifyRes result marshal failed", err)
+		return
+	}
+
+	resMsg.Data = string(data)
+	data, err = json.Marshal(resMsg)
+	if err != nil {
+		fmt.Println("user login resMes result marshal failed", err)
+		return
+	}
+	err = p.writePackage(data)
+	if err != nil {
+		fmt.Println("send message failed", err)
+		return
+	}
 
 }
 
