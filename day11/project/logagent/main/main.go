@@ -1,0 +1,34 @@
+package main
+
+import (
+	"fmt"
+	"go_dev/day11/project/logagent/server/tailf"
+
+	"github.com/astaxie/beego/logs"
+)
+
+func initConfig() (err error) {
+	configPath := "H:/360_update/oldboy_go/src/go_dev/day11/project/logagent/conf/logagent.conf"
+	err = loadConf("ini", configPath)
+	if err != nil {
+		fmt.Println("load config failed, err:", err)
+		panic("load config failed")
+		return
+	}
+	return
+}
+
+func initRun() {
+	err := tailf.InitTailf(appConf.collectConf, appConf.chanSize)
+	if err != nil {
+		logs.Warn("Init tailf err, err:%v", err)
+		return
+	}
+
+}
+
+func main() {
+	initConfig()
+	initRun()
+	logs.Debug("initialize all success")
+}
