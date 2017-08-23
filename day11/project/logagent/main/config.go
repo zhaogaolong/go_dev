@@ -17,6 +17,7 @@ type Config struct {
 	logPath     string
 	collectConf []server.CollectConf
 	chanSize    int
+	kafka_addr  string
 }
 
 var (
@@ -31,7 +32,7 @@ func loadConf(configType, fileName string) (err error) {
 	}
 	appConf = &Config{}
 	loadLogsConfig(conf)
-
+	loadKafkaConfig(conf)
 	err = loadColletConf(conf)
 	if err != nil {
 		logs.Warn("load colect conf failed, err:%v", err)
@@ -74,6 +75,14 @@ func loadLogsConfig(conf config.Configer) {
 
 }
 
+func loadKafkaConfig(conf config.Configer) {
+	appConf.kafka_addr = conf.String("kafka::server_addr")
+	if len(appConf.kafka_addr) == 0 {
+		appConf.logLevel = "localhost:9092"
+		logs.Debug("set default config kafka_addr=%s", appConf.kafka_addr)
+	}
+
+}
 func loadColletConf(conf config.Configer) (err error) {
 
 	appConf.chanSize, err = conf.Int("collect::chan_size")

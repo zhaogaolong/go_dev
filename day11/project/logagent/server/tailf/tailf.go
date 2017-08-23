@@ -20,7 +20,7 @@ func InitTailf(cellectConf []server.CollectConf, chanSize int) (err error) {
 		return
 	}
 
-	fmt.Println("chanSize:", chanSize)
+	TailfObjsMgr = &server.TailObjMgr{}
 	TailfObjsMgr.MsgChan = make(chan *server.TextMsg, chanSize)
 	// TailfObjsMgr = &server.TailObjMgr{}
 

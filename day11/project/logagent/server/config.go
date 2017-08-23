@@ -1,3 +1,8 @@
+/*
+server 定义的所有的类型统一管理
+
+*/
+
 package server
 
 import (
