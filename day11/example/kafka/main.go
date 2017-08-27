@@ -13,7 +13,7 @@ func main() {
 	config.Producer.Partitioner = sarama.NewRandomPartitioner
 	config.Producer.Return.Successes = true
 
-	client, err := sarama.NewSyncProducer([]string{"192.168.14.7:9092"}, config)
+	client, err := sarama.NewSyncProducer([]string{"192.168.14.4:9092"}, config)
 	if err != nil {
 		fmt.Println("kafka conn error:", err)
 		return
@@ -23,7 +23,7 @@ func main() {
 	for {
 		msg := &sarama.ProducerMessage{}
 		msg.Topic = "nginx_log"
-		msg.Value = sarama.StringEncoder("this is a good test, my message is good.")
+		msg.Value = sarama.StringEncoder("my name is Tony, 一起打王者荣耀.")
 		pid, offset, err := client.SendMessage(msg)
 
 		if err != nil {
@@ -31,7 +31,7 @@ func main() {
 			return
 		}
 		fmt.Printf("pid:%v, offset:%v\n", pid, offset)
-		time.Sleep(time.Second)
+		time.Sleep(time.Millisecond * 10)
 	}
 
 }

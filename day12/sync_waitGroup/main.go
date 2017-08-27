@@ -1,0 +1,26 @@
+package main
+
+import (
+	"fmt"
+	"sync"
+	"time"
+)
+
+func calc(m *sync.WaitGroup, i int) {
+	fmt.Println(i)
+	time.Sleep(time.Second)
+	m.Done()
+
+}
+
+func main() {
+	wg := sync.WaitGroup{}
+
+	for i := 0; i < 10; i++ {
+		wg.Add(1)
+		go calc(&wg, i)
+	}
+	wg.Wait()
+	fmt.Println("finsh all goroutine")
+
+}
