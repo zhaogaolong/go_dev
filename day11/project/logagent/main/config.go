@@ -18,6 +18,8 @@ type Config struct {
 	collectConf []server.CollectConf
 	chanSize    int
 	kafka_addr  string
+	etcdAddr    string
+	etcdTimeout int
 }
 
 var (
@@ -33,9 +35,9 @@ func loadConf(configType, fileName string) (err error) {
 	appConf = &Config{}
 	loadLogsConfig(conf)
 	loadKafkaConfig(conf)
-	err = loadColletConf(conf)
+	err = loadEtcdConfig(conf)
 	if err != nil {
-		logs.Warn("load colect conf failed, err:%v", err)
+		logs.Error("load Etcd conf failed, err:%v", err)
 		return
 	}
 	return
@@ -109,4 +111,18 @@ func loadColletConf(conf config.Configer) (err error) {
 
 	appConf.collectConf = append(appConf.collectConf, cc)
 	return
+}
+
+func loadEtcdConfig(conf config.Configer) (err error) {
+	appConf.etcdAddr = conf.String("etcd::addr")
+	if len(appConf.etcdAddr) == 0 {
+		err = fmt.Errorf("invalid [etcd]::addr")
+		return
+	}
+	appConf.etcdTimeout, err = conf.Int("etcd::timeout")
+	if err != nil {
+		appConf.etcdTimeout = 5
+	}
+	return
+
 }
