@@ -1,51 +1,70 @@
 package etcd
 
 import (
+	"strings"
 	"context"
 	"fmt"
 	"time"
-
+	"go_dev/day11/project/logagent/server"
+	"github.com/astaxie/beego/logs"
 	client "github.com/coreos/etcd/clientv3"
 )
 
 var (
-	cli     *client.Client
-	InitCli bool
+	EtcdClient	*client.Client
+	Collect 	[]server.CollectConf
 )
 
-func InitEtcd(addr string) {
+func InitEtcd(addr , etcdKey string) {
+	for {
+		err := connectEtcd(addr)
+		if err != nil {
+			logs.Error("connect etcd faile, err:", err)
+		} else {
+			break
+		}
+		time.Sleep(time.Second)
+	}
+	getConfig(etcdKey)
+	// startTailf()
+
+}
+func connectEtcd(addr string) (err error) {
 	cli, err := client.New(client.Config{
 		Endpoints:   []string{addr},
-		DialTimeout: time.Second * 5,
+		DialTimeout: 5 * time.Second,
 	})
 	if err != nil {
-		fmt.Println("connect etcd failed, err:", err)
 		return
 	}
-	InitCli = true
-	// defer cli.Close()
+	return
+}
 
+func getConfig(key string) (err error) {
+
+	// 是否以／结尾，如果不是就添加一个
+	if strings.HasSuffix(key, "/") == false{
+		key = key + "/"
+	}
+
+	for _, ip := range localIPArry{
+		etcdKey := fmt.Sprintf("%s%s", key, ip)
+		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+		resp, err := EtcdClient.Get(ctx, etcdKey)
+		if err != nil{
+			continue
+		}
+		cancel()
+		for k, v := range resp.Kvs{
+			fmt.Println(k, v)
+		}
+
+	}
+
+	return
 }
 
 func RunEtcd() {
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	_, err := cli.Put(ctx, "/logagent/conf", "sample_value")
-	cancel()
-	if err != nil {
-		fmt.Printf("put failed, err:", err)
-		return
-	}
-
-	ctx, cancel = context.WithTimeout(context.Background(), time.Second)
-	resp, err := cli.Get(ctx, "/logagent/conf")
-	cancel()
-	if err != nil {
-		fmt.Println("get failed, err:", err)
-		return
-	}
-	for _, ev := range resp.Kvs {
-		fmt.Printf("%s : %s\n", ev.Key, ev.Value)
-	}
 
 }
 

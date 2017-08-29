@@ -31,7 +31,11 @@ func initRun() {
 }
 
 func main() {
-	initConfig()
+	err := initConfig()
+	if err != nil{
+		fmt.Println("config read failed, err:", err)
+		return
+	}
 	initRun()
 	logs.Debug("initialize all success")
 }
