@@ -3,6 +3,7 @@ package tailf
 import (
 	"fmt"
 	"go_dev/day11/project/logagent/server"
+	"go_dev/day11/project/logagent/server/etcd"
 	"time"
 
 	"github.com/astaxie/beego/logs"
@@ -14,17 +15,21 @@ var (
 	TailfObjsMgr *server.TailObjMgr
 )
 
-func InitTailf(cellectConf []server.CollectConf, chanSize int) (err error) {
-	if len(cellectConf) == 0 {
+func InitTailf(chanSize int) (err error) {
+
+	// init msg chan
+	TailfObjsMgr = &server.TailObjMgr{}
+	TailfObjsMgr.MsgChan = make(chan *server.TextMsg, chanSize)
+
+	// 检查配置
+	if len(etcd.Collect) == 0 {
 		err = fmt.Errorf("invalid config for log collect, config:%v", chanSize)
 		return
 	}
 
-	TailfObjsMgr = &server.TailObjMgr{}
-	TailfObjsMgr.MsgChan = make(chan *server.TextMsg, chanSize)
 	// TailfObjsMgr = &server.TailObjMgr{}
 
-	for _, v := range cellectConf {
+	for _, v := range etcd.Collect {
 		obj := &server.TailfObj{
 			Conf: v,
 		}

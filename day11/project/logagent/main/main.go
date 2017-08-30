@@ -26,7 +26,7 @@ func initRun() {
 		return
 	}
 
-	err = tailf.InitTailf()
+	err = tailf.InitTailf(appConf.chanSize)
 	if err != nil {
 		logs.Warn("Init tailf err, err:%v", err)
 		return
