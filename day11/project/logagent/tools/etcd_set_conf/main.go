@@ -1,21 +1,21 @@
 package main
 
 import (
-	"encoding/json"
 	"context"
+	"encoding/json"
 	"fmt"
 	"time"
 
 	client "github.com/coreos/etcd/clientv3"
 )
 
-type LogConf struct{
-	Path string	`json:"path"`
-	Topic string	`json:"topic"`
+type LogConf struct {
+	Path  string `json:"path"`
+	Topic string `json:"topic"`
 }
 
 var (
-	EtcdKey = "/oldboy/backend/logagent/conf/192.168.1.111"
+	EtcdKey = "/ops/backend/logagent/conf/192.168.11.1"
 )
 
 func main() {
@@ -32,22 +32,22 @@ func main() {
 	var logConfArr []LogConf
 
 	logConfArr = append(
-		logConfArr, 
+		logConfArr,
 		LogConf{
-			Path: "/var/log/nginx/access.log",
+			Path:  "/var/log/nginx/access.log",
 			Topic: "nginx_log",
-		},	
+		},
 	)
 
 	logConfArr = append(
-		logConfArr, 
+		logConfArr,
 		LogConf{
-			Path: "/var/log/nginx/error.log",
+			Path:  "/var/log/nginx/error.log",
 			Topic: "nginx_log_error",
-		},	
+		},
 	)
 	data, err := json.Marshal(logConfArr)
-	if err != nil{
+	if err != nil {
 		fmt.Println("logConfig json marshal err:", err)
 		return
 	}

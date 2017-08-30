@@ -20,7 +20,7 @@ type Config struct {
 	kafka_addr  string
 	etcdAddr    string
 	etcdTimeout int
-	etcdKey string
+	etcdKey     string
 }
 
 var (
@@ -124,9 +124,9 @@ func loadEtcdConfig(conf config.Configer) (err error) {
 	if err != nil {
 		appConf.etcdTimeout = 5
 	}
-	appConf.etcdKey = conf.String("etcd::etcdKey")
+	appConf.etcdKey = conf.String("etcd::configKey")
 	if len(appConf.etcdKey) == 0 {
-		err = fmt.Errorf("invalid [etcd]::etcdKey")
+		err = fmt.Errorf("invalid [etcd]::configKey")
 		return
 	}
 	return
