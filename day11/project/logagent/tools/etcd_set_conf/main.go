@@ -10,8 +10,8 @@ import (
 )
 
 type LogConf struct {
-	Path  string `json:"path"`
-	Topic string `json:"topic"`
+	LogPath string `json:"log_path"`
+	Topic   string `json:"topic"`
 }
 
 var (
@@ -30,22 +30,23 @@ func main() {
 	defer cli.Close()
 
 	var logConfArr []LogConf
+	/*
+		logConfArr = append(
+			logConfArr,
+			LogConf{
+				LogPath: "h:/logs/access.log",
+				Topic:   "nginx_log",
+			},
+		)
 
-	logConfArr = append(
-		logConfArr,
-		LogConf{
-			Path:  "/var/log/nginx/access.log",
-			Topic: "nginx_log",
-		},
-	)
-
-	logConfArr = append(
-		logConfArr,
-		LogConf{
-			Path:  "/var/log/nginx/error.log",
-			Topic: "nginx_log_error",
-		},
-	)
+		logConfArr = append(
+			logConfArr,
+			LogConf{
+				LogPath: "h:/logs/logagent.log",
+				Topic:   "nginx_log",
+			},
+		)
+	*/
 	data, err := json.Marshal(logConfArr)
 	if err != nil {
 		fmt.Println("logConfig json marshal err:", err)

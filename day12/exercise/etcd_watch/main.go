@@ -22,15 +22,16 @@ func main() {
 
 	for {
 		// 获取一个watch chan
-		rch := cli.Watch(context.Background(), "/logagent/conf")
+		rch := cli.Watch(context.Background(), "/ops/backend/logagent/conf/192.168.11.1")
 
 		// 循环管道，获取一个watchResponse
 		for wresp := range rch {
 
+			fmt.Println("update config ", wresp)
 			// 循环watchResponse 获取事件，也就是最终的值
-			for _, ev := range wresp.Events {
-				fmt.Printf("%s  %q: %q \n", ev.Type, ev.Kv.Key, ev.Kv.Value)
-			}
+			// for _, ev := range wresp.Events {
+			// 	fmt.Printf("%s  %q: %q \n", ev.Type, ev.Kv.Key, ev.Kv.Value)
+			// }
 		}
 	}
 }

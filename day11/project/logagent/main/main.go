@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"go_dev/day11/project/logagent/server/etcd"
+	"go_dev/day11/project/logagent/server/kafka"
 	"go_dev/day11/project/logagent/server/tailf"
 
 	"github.com/astaxie/beego/logs"
@@ -31,7 +32,7 @@ func initRun() {
 		logs.Warn("Init tailf err, err:%v", err)
 		return
 	}
-	// kafka.ServerRun(appConf.kafka_addr)
+	kafka.ServerRun(appConf.kafka_addr)
 
 }
 

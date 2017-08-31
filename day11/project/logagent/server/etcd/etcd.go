@@ -15,9 +15,15 @@ import (
 var (
 	EtcdClient *client.Client
 	Collect    []server.CollectConf
+
+	// 主要用于当配置改变后通知
+	EtcdConfigUpdate chan int
 )
 
 func InitEtcd(addr, etcdKey string) (err error) {
+	// 初始化更新管道
+	EtcdConfigUpdate = make(chan int, 1)
+
 	for {
 		err := connectEtcd(addr)
 		if err != nil {
@@ -55,7 +61,7 @@ func getConfig(key string) (err error) {
 		etcdKey := fmt.Sprintf("%s%s", key, ip)
 		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 		resp, err := EtcdClient.Get(ctx, etcdKey)
-		logs.Debug("get etcd config key:%s", etcdKey)
+		// logs.Debug("get etcd config key:%s", etcdKey)
 		if err != nil {
 			continue
 		}
@@ -68,6 +74,11 @@ func getConfig(key string) (err error) {
 				logs.Error("etcd config umarshal failed, err: %v", err)
 				continue
 			}
+			Collect = colConf
+
+			// start watch key
+			go watchEtcd(etcdKey)
+
 			logs.Info("etcd config umarshal success, %v", colConf)
 
 			logs.Info("etcd config : %s", v.Value)
@@ -83,4 +94,34 @@ func RunEtcd() {
 
 func updateConfig() {}
 
-func WatchEtcd() {}
+func watchEtcd(key string) {
+	time.Sleep(time.Second * 2)
+	for {
+		rch := EtcdClient.Watch(context.Background(), key)
+		for _ = range rch {
+			// fmt.Println("update config ", wresp)
+			logs.Warn("[etcd watch] etcd config changed masu update config")
+
+			ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+			resp, err := EtcdClient.Get(ctx, key)
+			if err != nil {
+				logs.Error("[etcd watch]  get new config failed, err: %v", err)
+				continue
+			}
+			cancel()
+
+			for _, v := range resp.Kvs {
+				var colConf = []server.CollectConf{}
+
+				err := json.Unmarshal(v.Value, &colConf)
+				if err != nil {
+					logs.Error("etcd config umarshal failed, err: %v", err)
+					continue
+				}
+				Collect = colConf
+			}
+			logs.Warn("[etcd watch] update config %v", Collect)
+			EtcdConfigUpdate <- 1
+		}
+	}
+}
