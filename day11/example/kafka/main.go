@@ -13,7 +13,7 @@ func main() {
 	config.Producer.Partitioner = sarama.NewRandomPartitioner
 	config.Producer.Return.Successes = true
 
-	client, err := sarama.NewSyncProducer([]string{"192.168.11.128:9092"}, config)
+	client, err := sarama.NewSyncProducer([]string{"192.168.1.201:9092"}, config)
 	if err != nil {
 		fmt.Println("kafka conn error:", err)
 		return
@@ -31,7 +31,7 @@ func main() {
 			return
 		}
 		fmt.Printf("pid:%v, offset:%v\n", pid, offset)
-		time.Sleep(time.Millisecond * 10)
+		time.Sleep(time.Second)
 		count++
 	}
 
