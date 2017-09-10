@@ -11,8 +11,12 @@ type IndexController struct {
 
 func (p *IndexController) Index() {
 	logs.Debug("index get ....")
-	p.TplName = "index/index.html"
-}
-func init() {
-	beego.Router("/index", &IndexController{}, "*:Index")
+
+	// json result 
+	data := make(map[string]interface{})
+	data["code"] = 200
+	data["message"] = "success"
+	p.Data["json"] = &data
+	p.ServeJSON(true)
+
 }
