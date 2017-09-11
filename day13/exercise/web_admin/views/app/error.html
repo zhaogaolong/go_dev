@@ -124,47 +124,9 @@
 
 		<!-- 把数据渲染到该位置 -->
         <div class="portlet box red">
-            <div class="portlet-title">
-                <div class="caption"><i class="icon-cogs"></i>项目列表</div>
-            </div>
-            <div class="portlet-body">
-
-                <table class="table table-hover">
-
-                    <thead>
-
-                        <tr>
-
-                            <th>#</th>
-
-                            <th>项目名称</th>
-
-                            <th>项目类型</th>
-
-                            <th class="hidden-480">创建时间</th>
-
-                            <th>部署路径</th>
-
-                        </tr>
-
-                    </thead>
-
-                    <tbody>
-                        {{ range .applist }}
-                        <tr>
-                            <td>{{ .AppID }}</td>
-                            <td>{{ .AppName }}</td>
-                            <td>{{ .AppType }}</td>
-                            <td class="hidden-480">{{ .CreateTime }}</td>
-                            <td><span class="label label-success">{{ .DevelopPath }}</span></td>
-                        </tr>
-                        {{ end }}
-                    </tbody>
-
-                </table>
-
-            </div>
-
+			<div>
+				{{ .Error }}
+			</div>
         </div>
 
 	</div>
