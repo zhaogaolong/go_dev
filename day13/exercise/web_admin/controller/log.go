@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"strings"
 	"fmt"
 	"go_dev/day13/exercise/web_admin/model"
 
@@ -9,11 +8,11 @@ import (
 	"github.com/astaxie/beego/logs"
 )
 
-type AppController struct {
+type LogController struct {
 	beego.Controller
 }
 
-func (p *AppController) AppList() {
+func (p *LogController) LogList() {
 	appList, err := model.GetAllAppInfo()
 
 	p.Layout = "layout/layout.html"
@@ -32,38 +31,37 @@ func (p *AppController) AppList() {
 
 }
 
-func (p *AppController) AppApply() {
+func (p *LogController) LogApply() {
 	logs.Debug("appApply html")
 	p.Layout = "layout/layout.html"
-	p.TplName = "app/apply.html"
+	p.TplName = "log/apply.html"
 }
 
-func (p *AppController) AppCreate() {
+func (p *LogController) LogCreate() {
 	p.Layout = "layout/layout.html"
 
 	// 获取所有到信息
 	appName := p.GetString("project-name")
-	appType := p.GetString("project-type")
-	appIps := p.GetString("ip-list")
-	appDevelopPath := p.GetString("develop-path")
-	if len(appName) == 0 || len(appType) == 0 || len(appIps) == 0 || len(appDevelopPath) == 0{
+	logPath := p.GetString("log-path")
+	topic := p.GetString("topic")
+	if len(appName) == 0 || len(logPath) == 0 || len(topic) == 0{
 		p.Data["Error"] = fmt.Sprintf("非法到参数")
 		p.TplName = "app/error.html"
 		return
 	}
-	appInfo := &model.AppInfo{}
-	appInfo.AppName = appName
-	appInfo.AppType = appType
-	appInfo.DevelopPath = appDevelopPath
-	appInfo.IP = strings.Split(appIps, ",")
 
-	err := model.CreateApp(appInfo)
+	logInfo := &model.LogInfo{}
+	logInfo.AppName = appName
+	logInfo.LogPath = logPath
+	logInfo.Topic = topic
+
+	err := model.CreateLog(logInfo)
 	if err != nil{
+		logs.Warn("create log filed, err:%v", err)
 		p.Data["Error"] = fmt.Sprintf("创建项目失败，数据库繁忙")
 		p.TplName = "app/error.html"
 		return
 	}
-
 	// 创建完成后重定向到项目列表
 	p.Redirect("/app/list", 302)
 

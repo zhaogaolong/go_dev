@@ -12,7 +12,7 @@ import (
 )
 
 func initDb() (err error) {
-	database, err := sqlx.Open("mysql", "root:root@tcp(192.168.11.128:3306)/web_admin")
+	database, err := sqlx.Open("mysql", "root:root@tcp(192.168.1.201:3306)/golang")
 	if err != nil {
 		return
 	}
